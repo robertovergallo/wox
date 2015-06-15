@@ -83,12 +83,12 @@ public class Topic extends Observable {
 	}
 
 	public void setPreferredValue(String value) {
-		if(an_role!=null) an_role = new Role(Role.ACTUATOR_NEED);
+		if(an_role==null) an_role = new Role(Role.ACTUATOR_NEED);
 		an_role.sendPreferredValue(this, value);
 	}
 
 	public void setActualValue(String value) {
-		if(sc_role!=null) sc_role = new Role(Role.SENSOR_CAPABILITY);
+		if(sc_role==null) sc_role = new Role(Role.SENSOR_CAPABILITY);
 		sc_role.sendActualValue(this, value);
 	}
 	
