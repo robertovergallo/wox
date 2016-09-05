@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Kiss&amp;Fly</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+	<string name="servicedesc">LWoX APDU service</string>
+	<string name="aiddescription">LWoX AID</string>
+    <string name="btn_exit">Esci da Kiss&amp;Fly</string>
+    <string name="btn_enter">Entra in Kiss&amp;Fly</string>
+
+</resources>
