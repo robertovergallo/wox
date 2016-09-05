@@ -5,21 +5,32 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Topic extends Observable {
-	
+public class Topic extends Observable{
+
 	private int feature_id;
 	private String location_MD5;
 	private String location;
 	private String value;
 	private Role sn_role;
 	private Role an_role;
-	private Role sc_role;
-	private Role ac_role;
+
+	public final static int FEATURE_TEMPERATURE			= 0;
+	public final static int FEATURE_PRESSURE 			= 1;
+	public final static int FEATURE_LIGHTING 			= 2;
+	public final static int FEATURE_ALARM 				= 3;
+	public final static int FEATURE_SUM 				= 4;
+	public final static int FEATURE_FALL				= 5;
+	public final static int FEATURE_MISSED_DRUG			= 6;
+	public final static int FEATURE_SHOCK				= 7;
+	public final static int FEATURE_INDOOR_AREA_CHANGE	= 8;
+	public final static int FEATURE_PROLONGED_STAY		= 9;
+	public final static int FEATURE_ENTERTAINMENT		= 10;
+	public final static int FEATURE_BARRIER				= 11;
 	
 	public Topic(int feature_id, String location) {
 		super();
 		this.feature_id = feature_id;
-		this.location=location;
+		this.location = location;
 		this.location_MD5 = convertMD5(location);
 	}
 	
@@ -38,19 +49,11 @@ public class Topic extends Observable {
 		this.location_MD5 = location_MD5;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
 	public String getValue() {
 		return value;
 	}
 
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		this.value = value;
 		setChanged();
 		notifyObservers(value);
@@ -61,19 +64,9 @@ public class Topic extends Observable {
 		subscribe();
 	}
 
-	public void subscribeAC(Observer o) {
-		addObserver(o);
-		subscribeAC();
-	}
-
-	private void subscribe() {
-		if(sn_role==null) sn_role=new Role(Role.SENSOR_NEED);
+	public void subscribe() {
+		sn_role=new Role(Role.SENSOR_NEED);
 		sn_role.start(this);
-	}
-
-	private void subscribeAC() {
-		if(ac_role==null) ac_role=new Role(Role.ACTUATOR_CAPABILITY);
-		ac_role.start(this);
 	}
 
 	public void unsubscribe() {
@@ -81,16 +74,12 @@ public class Topic extends Observable {
 			sn_role.stop();
 	}
 
-	public void setPreferredValue(String value) {
-		if(an_role==null) an_role = new Role(Role.ACTUATOR_NEED);
+	public void setPreferredValue(Object value) {
+		an_role = new Role(Role.ACTUATOR_NEED);
 		an_role.sendPreferredValue(this, value);
 	}
-
-	public void setActualValue(String value) {
-		if(sc_role==null) sc_role = new Role(Role.SENSOR_CAPABILITY);
-		sc_role.sendActualValue(this, value);
-	}
 	
+
 	private static String convertMD5(String toConvert)
 	{
 		String generatedMD5 = null;
@@ -115,6 +104,7 @@ public class Topic extends Observable {
         {
             e.printStackTrace();
         }
+        System.out.println("************* MD5 for "+toConvert+" is "+ generatedMD5);
         return generatedMD5;
 	}
 }

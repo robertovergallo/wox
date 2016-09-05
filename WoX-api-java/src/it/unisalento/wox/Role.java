@@ -30,7 +30,7 @@ public class Role extends TimerTask{
 		switch(roleType) {
 			case SENSOR_CAPABILITY: break;
 			case SENSOR_NEED: startPollingSensorNeed(); break;
-			case ACTUATOR_CAPABILITY: break;
+			case ACTUATOR_CAPABILITY: startPollingActuatorCapability(); break;
 			case ACTUATOR_NEED: break;
 			default: System.out.println("Nothing to start");
 		}
@@ -41,8 +41,8 @@ public class Role extends TimerTask{
 		if(!hasStarted) return;
 		switch(roleType) {
 			case SENSOR_CAPABILITY: break;
-			case SENSOR_NEED: stopPollingSensorNeed(); break;
-			case ACTUATOR_CAPABILITY: break;
+			case SENSOR_NEED: stopPolling(); break;
+			case ACTUATOR_CAPABILITY: stopPolling(); break;
 			case ACTUATOR_NEED: break;
 			default: System.out.println("Nothing to stop");
 		}
@@ -60,13 +60,23 @@ public class Role extends TimerTask{
 		timer.scheduleAtFixedRate(this, 0, 5*1000);
 	}
 	
-	protected void stopPollingSensorNeed() {
+	protected void stopPolling() {
 		if(WoXmanager.getInstance().getAppId() == null) {
 			System.out.println("ERROR: please set your app id! This way: WoTmanager.getInstance().setAppId('you_app_id');");
 			return;
 		}
 		timer.cancel();
 		String s = sendPost("unsubscribe/"+t.getFeature_id()+"/"+t.getLocation_MD5()+"/?app_id="+WoXmanager.getInstance().getAppId(), null);
+	}
+	
+	protected void startPollingActuatorCapability() {
+		if(WoXmanager.getInstance().getAppId() == null) {
+			System.out.println("ERROR: please set your app id! This way: WoTmanager.getInstance().setAppId('you_app_id');");
+			return;
+		}
+		String s = sendPost("subscribe/"+t.getFeature_id()+"/"+t.getLocation_MD5()+"/?app_id="+WoXmanager.getInstance().getAppId()+"&type=AC", "<appId/>");
+		timer = new Timer(true);
+		timer.scheduleAtFixedRate(this, 0, 5*1000);
 	}
 
 	@Override

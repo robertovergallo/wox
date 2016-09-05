@@ -1,5 +1,6 @@
 package it.unisalento.wox.test;
 
+import it.unisalento.wox.Feature;
 import it.unisalento.wox.Topic;
 import it.unisalento.wox.WoXmanager;
 
@@ -11,7 +12,7 @@ public class Client {
  
 	public Client() {
 		WoXmanager.getInstance().setAppId("asd");
-		Topic t1=new Topic(Topic.FEATURE_TEMPERATURE, "casa");
+		Topic t1=new Topic(Feature.LIGHTING, "casa");
 		t1.subscribe(new TopicObserver());
 		//t1.setPreferredValue("30.0");
 		
